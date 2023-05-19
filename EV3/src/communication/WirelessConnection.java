@@ -54,21 +54,25 @@ public class WirelessConnection extends Thread {
 		connection();
 		this.ba = BotAction.valueOf(WAITING);
 		appAlive = true;
-
+	
 		while (appAlive){
 			try {
-				
+					
 				this.setAction((int) dataIn.readByte());
-
+	
 				Thread.sleep(100);
 				System.out.println("Order received: " + this.ba);
 				this.ba = BotAction.valueOf(WAITING);
 			}
 			catch (IOException ioe) {
+				setAppAlive(false);
+				disconnect();
 				System.out.println("IO Exception readInt");
 				ioe.printStackTrace();
 			}
 			catch (InterruptedException ie) {
+				setAppAlive(false);
+				disconnect();
 				System.out.println("Thread connection interrupted");
 				ie.printStackTrace();
 			}
